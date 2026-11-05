@@ -1173,7 +1173,7 @@ module Capybara
 
         it "can be configured in the driver with url_blocklist and survive reset" do
           Capybara.register_driver :cuprite_blocklist do |app|
-            Capybara::Cuprite::Driver.new(app, @driver.options.except(:url_blacklist).merge(url_blocklist: /unwanted/))
+            Capybara::Cuprite::Driver.new(app, @driver.options.merge(url_blocklist: /unwanted/))
           end
 
           session = Capybara::Session.new(:cuprite_blocklist, @session.app)
@@ -1278,8 +1278,7 @@ module Capybara
         it "can be configured in the driver with url_allowlist and survive reset" do
           Capybara.register_driver :cuprite_allowlist do |app|
             Capybara::Cuprite::Driver.new(app,
-                                          @driver.options.except(:url_whitelist)
-                                                 .merge(url_allowlist: [/url_whitelist/, %r{/cuprite/wanted}]))
+                                          @driver.options.merge(url_allowlist: [/url_whitelist/, %r{/cuprite/wanted}]))
           end
 
           session = Capybara::Session.new(:cuprite_allowlist, @session.app)
