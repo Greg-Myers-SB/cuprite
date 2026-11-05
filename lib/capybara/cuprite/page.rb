@@ -176,10 +176,10 @@ module Capybara
         width, height = @options.window_size
         resize(width: width, height: height)
 
-        if @options.url_blacklist.any?
-          network.blacklist = @options.url_blacklist
-        elsif @options.url_whitelist.any?
-          network.whitelist = @options.url_whitelist
+        if @options.url_blocklist.any?
+          network.blocklist = @options.url_blocklist
+        elsif @options.url_allowlist.any?
+          network.allowlist = @options.url_allowlist
         end
 
         on("Page.javascriptDialogOpening") do |params|

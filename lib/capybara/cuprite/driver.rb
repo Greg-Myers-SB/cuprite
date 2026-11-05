@@ -36,8 +36,10 @@ module Capybara
         @options[:save_path] ||= File.expand_path(Capybara.save_path) if Capybara.save_path
 
         @options[:pending_connection_errors] = true unless @options.key?(:pending_connection_errors)
-        @options[:url_blacklist] = @options.delete(:url_blocklist) if @options.key?(:url_blocklist)
-        @options[:url_whitelist] = @options.delete(:url_allowlist) if @options.key?(:url_allowlist)
+        { url_blacklist: :url_blocklist, url_whitelist: :url_allowlist }.each do |legacy, key|
+          value = @options.delete(legacy)
+          @options[key] = value unless value.nil? || @options.key?(key)
+        end
 
         # It's set for debug() to make devtools tab open correctly.
         @options[:browser_options] ||= {}
@@ -137,8 +139,8 @@ module Capybara
       def reset!
         @zoom_factor = nil
         @paper_size = nil
-        browser.url_blacklist = @options[:url_blacklist]
-        browser.url_whitelist = @options[:url_whitelist]
+        browser.url_blocklist = @options[:url_blocklist]
+        browser.url_allowlist = @options[:url_allowlist]
         browser.raise_on_unhandled_modal = @options.fetch(:raise_on_unhandled_modal, false)
         browser.reset
       ensure

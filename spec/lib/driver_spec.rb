@@ -9,6 +9,23 @@ describe Capybara::Cuprite::Driver do
     end
   end
 
+  describe "url_blocklist and url_allowlist options" do
+    it "maps the legacy keys to the new ones" do
+      driver = described_class.new(nil, { url_blacklist: /blocked/, url_whitelist: /allowed/ })
+
+      expect(driver.options).to include(url_blocklist: /blocked/, url_allowlist: /allowed/)
+      expect(driver.options).not_to include(:url_blacklist, :url_whitelist)
+    end
+
+    it "prefers the new keys when both are given" do
+      driver = described_class.new(nil, { url_blacklist: /legacy/, url_blocklist: /blocked/,
+                                          url_whitelist: /legacy/, url_allowlist: /allowed/ })
+
+      expect(driver.options).to include(url_blocklist: /blocked/, url_allowlist: /allowed/)
+      expect(driver.options).not_to include(:url_blacklist, :url_whitelist)
+    end
+  end
+
   describe "raise_on_unhandled_modal configuration" do
     it "survives resetting the driver between examples" do
       driver = described_class.new(nil, { raise_on_unhandled_modal: true })
