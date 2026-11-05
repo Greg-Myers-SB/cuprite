@@ -17,8 +17,8 @@ module Capybara
         super
 
         @options.raise_on_unhandled_modal = options&.dig(:raise_on_unhandled_modal)
-        @options.url_blacklist = prepare_wildcards(options&.dig(:url_blocklist))
-        @options.url_whitelist = prepare_wildcards(options&.dig(:url_allowlist))
+        @options.url_blocklist = prepare_wildcards(options&.dig(:url_blocklist))
+        @options.url_allowlist = prepare_wildcards(options&.dig(:url_allowlist))
 
         @page = nil
       end
@@ -61,27 +61,27 @@ module Capybara
         @options.raise_on_unhandled_modal = value
       end
 
-      def url_whitelist
-        @options.url_whitelist
+      def url_allowlist
+        @options.url_allowlist
       end
-      alias url_allowlist url_whitelist
+      alias url_whitelist url_allowlist
 
-      def url_whitelist=(patterns)
-        @options.url_whitelist = prepare_wildcards(patterns)
-        page.network.whitelist = @options.url_whitelist if @client && @options.url_whitelist.any?
+      def url_allowlist=(patterns)
+        @options.url_allowlist = prepare_wildcards(patterns)
+        page.network.allowlist = @options.url_allowlist if @client && @options.url_allowlist.any?
       end
-      alias url_allowlist= url_whitelist=
+      alias url_whitelist= url_allowlist=
 
-      def url_blacklist
-        @options.url_blacklist
+      def url_blocklist
+        @options.url_blocklist
       end
-      alias url_blocklist url_blacklist
+      alias url_blacklist url_blocklist
 
-      def url_blacklist=(patterns)
-        @options.url_blacklist = prepare_wildcards(patterns)
-        page.network.blacklist = @options.url_blacklist if @client && @options.url_blacklist.any?
+      def url_blocklist=(patterns)
+        @options.url_blocklist = prepare_wildcards(patterns)
+        page.network.blocklist = @options.url_blocklist if @client && @options.url_blocklist.any?
       end
-      alias url_blocklist= url_blacklist=
+      alias url_blacklist= url_blocklist=
 
       def visit(*args)
         goto(*args)
